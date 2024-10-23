@@ -1,46 +1,48 @@
 package server
 
 import (
-	proto "chitchat/chitchat"
-	//"context"
-	//"log"
-	//"net"
-	//"google.golang.org/grpc"
+	proto "chitchat"
+	"context"
 )
 
-type Connection struct {
+// serveren
+type ChitChatServer struct {
 	proto.UnimplementedBroadcastServer
-	stream proto.Broadcast_CreateStreamServer
-	id     string
-	active bool
+	participants map[string]int64
+	id           string
+	active       bool
 	//name   string
 	error chan error
 }
 
-type Server struct {
-	proto.UnimplementedBroadcastServer
-	//timestamp int64
-	Connection []*Connection
-}
-
-func (p *Server) CreateStream(pconn *proto.Connect, stream proto.Broadcast_CreateStreamServer) error {
-	conn := &Connection{
-		stream: stream,
-		id:     pconn.Participant.Id,
-		active: true,
-		error:  make(chan error),
+func NewChitChatServer() *ChitChatServer {
+	return &ChitChatServer{
+		participants: make(map[string]int64),
 	}
-
-	p.Connection = append(p.Connection, conn)
-
-	return <-conn.error
 }
 
-func BroadCastMessage() {
+//Der er en funktion til hver handling i programmet.
+//I parameteren tager de messagesne fra chitchat.proto.
+//Inde i disse metoder skal der så oprettes logik for hvad der sker når
+// hver af de her "services" skal eksekveres.
+
+// functions til at Joine en chat
+func (s *ChitChatServer) Join(ctx context.Context, req *proto.JoinRequest) (*proto.JoinResponse, error) {
 
 }
 
-func removeDisconnectedClients() {
+// funtions til at forlade en chat
+func (s *ChitChatServer) Leave(ctx context.Context, req *proto.LeaveRequest) (*proto.LeaveResponse, error) {
+}
+
+// funtion til at publicere en besked
+func (s *ChitChatServer) PublishMessage(ctx context.Context, req *proto.ChatMessage) (*proto.PublishResponse, error) {
+
+}
+
+//funktion der skal broadcaste besked
+
+func (s *ChitChatServer) Broadcast(ctx context.Context, req *proto.BroadcastMessage) (*proto.BroadcastResponse, error) {
 
 }
 
