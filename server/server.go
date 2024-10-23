@@ -8,32 +8,32 @@ import (
 	//"google.golang.org/grpc"
 )
 
-type Connection struct {
-	proto.UnimplementedBroadcastServer
-	stream proto.Broadcast_CreateStreamServer
+type ClientInformation struct {
+	proto.UnimplementedChitChatServer
+	stream proto.ChitChat_CreateStreamServer
 	id     string
 	active bool
 	//name   string
-	error chan error
+	errorChannel chan error
 }
 
 type Server struct {
-	proto.UnimplementedBroadcastServer
+	proto.UnimplementedChitChatServer
 	//timestamp int64
-	Connection []*Connection
+	ConnectedClients []*ClientInformation //Vi får en liste af de clients, der connected til serveren
 }
 
-func (p *Server) CreateStream(pconn *proto.Connect, stream proto.Broadcast_CreateStreamServer) error {
-	conn := &Connection{
+func (p *Server) CreateStream(participant *proto.Participant, stream proto.ChitChat_CreateStreamServer) error { //error er returværdien
+	clientInformation := &ClientInformation{
 		stream: stream,
-		id:     pconn.Participant.Id,
+		id:     participant.Id,
 		active: true,
-		error:  make(chan error),
+		errorChannel:  make(chan error), //laver en channel der modtager en error, når der skal lukkes ned for forbindelsen
 	}
 
-	p.Connection = append(p.Connection, conn)
+	p.ConnectedClients = append(p.ConnectedClients, clientInformation) //connected clients bliver tilføjet til arrayet
 
-	return <-conn.error
+	return <-clientInformation.errorChannel
 }
 
 func BroadCastMessage() {
