@@ -1,13 +1,17 @@
-2024/10/27 21:36:24 Server listening on [::]:50051
-2024/10/27 21:36:37 Participant User 1 joined the chat at Lamport time 1
-2024/10/27 21:36:46 Participant User 1 published message at Lamport time 2: Hey, er det noget her i chatten?
-2024/10/27 21:36:52 Participant User 2 joined the chat at Lamport time 3
-2024/10/27 21:37:07 Participant User 2 published message at Lamport time 4: Ja, hej med dig!
-2024/10/27 21:37:14 Participant User 3 joined the chat at Lamport time 5
-2024/10/27 21:37:24 Participant User 3 published message at Lamport time 6: Jeg har lige joinet - ret sejt!
-2024/10/27 21:37:43 Participant User 1 published message at Lamport time 7: Jamen så virker det jo - jeg vil smutte nu, vi ses :)
-2024/10/27 21:37:45 Participant User 1 left the chat at Lamport time 8
-2024/10/27 21:37:58 Participant User 2 published message at Lamport time 9: Jeg forlader også chatten nu, sov godt
-2024/10/27 21:37:59 Participant User 2 left the chat at Lamport time 10
-2024/10/27 21:38:20 Participant User 3 published message at Lamport time 11: Også miiiigggg, see you guys!
-2024/10/27 21:38:21 Participant User 3 left the chat at Lamport time 12
+2024/10/27 21:56:36 Server listening on [::]:50051
+2024/10/27 21:56:41 Participant 1 joined the chat at Lamport time 1
+2024/10/27 21:56:50 Participant 1 published message at Lamport time 2: Hey, er der nogle her i chatten?
+2024/10/27 21:56:55 Participant 2 joined the chat at Lamport time 3
+2024/10/27 21:57:00 Participant 2 published message at Lamport time 4: Ja, hej med dig!
+2024/10/27 21:57:07 Participant 1 published message at Lamport time 5: Hej har du det godt?
+2024/10/27 21:57:11 Participant 3 joined the chat at Lamport time 6
+2024/10/27 21:57:25 Participant 3 published message at Lamport time 7: Hej med jer 2, jeg har lige joinet chatten;)
+2024/10/27 21:57:34 Participant 2 published message at Lamport time 8: Hej!
+2024/10/27 21:57:41 Participant 1 published message at Lamport time 9: Goddag
+2024/10/27 21:57:59 Participant 2 published message at Lamport time 10: Nå, sry guys, men jeg må hellere hoppe i seng, jeg forlader chatten nu..
+2024/10/27 21:58:00 Participant 2 left the chat at Lamport time 11
+2024/10/27 21:58:26 Participant 3 published message at Lamport time 12: Årghhh øv, også mig så.. vi ses venner
+2024/10/27 21:58:27 Participant 3 left the chat at Lamport time 13
+2024/10/27 21:58:39 Participant 1 published message at Lamport time 14: øvvvvvv, så er jeg den eneste tilbage...
+2024/10/27 21:58:52 Participant 1 published message at Lamport time 15: Det er kedelig at være alene.. så jeg går også.. seees
+2024/10/27 21:58:53 Participant 1 left the chat at Lamport time 16

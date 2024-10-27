@@ -33,7 +33,7 @@ func (s *ChitChatServer) Join(ctx context.Context, req *pb.JoinRequest) (*pb.Joi
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	participantId := fmt.Sprintf("User %d", s.nextParticipantId+1)
+	participantId := fmt.Sprintf("Participant %d", s.nextParticipantId+1)
 	s.nextParticipantId++
 
 	s.participants[participantId] = true
@@ -48,7 +48,7 @@ func (s *ChitChatServer) Join(ctx context.Context, req *pb.JoinRequest) (*pb.Joi
 	go s.sendToAllStreams(joinMessage, participantId)
 
 	welcomeMessage := fmt.Sprintf("Welcome to ChitChat, %s!", participantId)
-	log.Printf("Participant %s joined the chat at Lamport time %d", participantId, s.lamportTime)
+	log.Printf("%s joined the chat at Lamport time %d", participantId, s.lamportTime)
 	return &pb.JoinResponse{Hello: welcomeMessage, ParticipantId: participantId}, nil
 }
 
@@ -68,7 +68,7 @@ func (s *ChitChatServer) Leave(ctx context.Context, req *pb.LeaveRequest) (*pb.L
 	}
 	go s.sendToAllStreams(leaveMessage, participantId)
 
-	log.Printf("Participant %s left the chat at Lamport time %d", participantId, s.lamportTime)
+	log.Printf("%s left the chat at Lamport time %d", participantId, s.lamportTime)
 	return &pb.LeaveResponse{ByeMessage: "Goodbye!"}, nil
 }
 
@@ -103,7 +103,7 @@ func (s *ChitChatServer) PublishMessage(ctx context.Context, req *pb.ChatMessage
 		ParticipantId: req.ParticipantId,
 	}, req.ParticipantId)
 
-	log.Printf("Participant %s published message at Lamport time %d: %s", req.ParticipantId, messageTime, req.Message)
+	log.Printf("%s published message at Lamport time %d: %s", req.ParticipantId, messageTime, req.Message)
 	return &pb.PublishResponse{Status: "Message delivered"}, nil
 }
 

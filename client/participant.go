@@ -59,7 +59,7 @@ func main() {
 			if err != nil {
 				log.Fatalf("could not publish: %v", err)
 			}
-			log.Printf("Publish response: %s", pubResp.Status)
+			log.Printf(pubResp.Status)
 		}
 	}
 }
