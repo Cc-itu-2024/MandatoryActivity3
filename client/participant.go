@@ -38,7 +38,7 @@ func main() {
 			if err != nil {
 				log.Fatalf("Error receiving message: %v", err)
 			}
-			log.Printf("Received: %s at Lamport time %d", notification.Message.Message, notification.Message.Time)
+			log.Printf("%s", notification.Message.Message)
 		}
 	}()
 
@@ -47,8 +47,11 @@ func main() {
 		log.Print("Enter your message or write exit to leave")
 		if scanner.Scan() {
 			message := scanner.Text()
+			if message == "exit" {
+				LeaveChat(client, participantId)
+				break
+			}
 
-			// Send meddelelsen til chatten
 			pubResp, err := client.PublishMessage(context.Background(), &pb.ChatMessage{
 				Message:       message,
 				ParticipantId: participantId,
@@ -56,36 +59,8 @@ func main() {
 			if err != nil {
 				log.Fatalf("could not publish: %v", err)
 			}
-			if message == "exit" {
-				LeaveChat(client, participantId) // der skal ske noget her
-				break
-			}
 			log.Printf("Publish response: %s", pubResp.Status)
 		}
-
-		/*
-			pubResp, err := client.PublishMessage(context.Background(), &pb.ChatMessage{
-				Message:            "Hello, ChitChat, I am here!",
-				ParticipantId: participantId,
-			})
-			if err != nil {
-				log.Fatalf("could not publish: %v", err)
-			}
-			log.Printf("Publish response: %s", pubResp.Status)
-		*/
-
-		/*
-				time.Sleep(3 * time.Second)
-
-				leaveResp, err := client.Leave(context.Background(), &pb.LeaveRequest{
-					ParticipantId: participantId,
-				})
-				if err != nil {
-					log.Fatalf("could not leave: %v", err)
-				}
-				log.Printf("Leave response: %s", leaveResp.ByeMessage)
-			}
-		*/
 	}
 }
 func LeaveChat(client pb.ChitChatClient, participantId string) {
@@ -96,5 +71,5 @@ func LeaveChat(client pb.ChitChatClient, participantId string) {
 		log.Fatal("failed to leave chat :(")
 	}
 
-	log.Printf("%s %s %d", participantId, leaveResp.ByeMessage)
+	log.Printf("%s %s", participantId, leaveResp.ByeMessage)
 }

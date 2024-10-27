@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"sync"
 	"os"
+	"sync"
 
 	pb "chitchat/chitchat"
 
@@ -33,22 +33,19 @@ func (s *ChitChatServer) Join(ctx context.Context, req *pb.JoinRequest) (*pb.Joi
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	
 	participantId := fmt.Sprintf("User %d", s.nextParticipantId+1)
 	s.nextParticipantId++
 
-	
 	s.participants[participantId] = true
-	s.streams[participantId] = make(chan *pb.BroadcastMessage, 10) 
+	s.streams[participantId] = make(chan *pb.BroadcastMessage, 10)
 
-	
 	s.lamportTime++
 	joinMessage := &pb.BroadcastMessage{
 		Message:       fmt.Sprintf("Participant %s joined at Lamport time %d", participantId, s.lamportTime),
 		Time:          s.lamportTime,
 		ParticipantId: participantId,
 	}
-	go s.sendToAllStreams(joinMessage)
+	go s.sendToAllStreams(joinMessage, participantId)
 
 	welcomeMessage := fmt.Sprintf("Welcome to ChitChat, %s!", participantId)
 	log.Printf("Participant %s joined the chat at Lamport time %d", participantId, s.lamportTime)
@@ -63,31 +60,30 @@ func (s *ChitChatServer) Leave(ctx context.Context, req *pb.LeaveRequest) (*pb.L
 	delete(s.participants, participantId)
 	delete(s.streams, participantId)
 
-
 	s.lamportTime++
 	leaveMessage := &pb.BroadcastMessage{
 		Message:       fmt.Sprintf("Participant %s left at Lamport time %d", participantId, s.lamportTime),
 		Time:          s.lamportTime,
 		ParticipantId: participantId,
 	}
-	go s.sendToAllStreams(leaveMessage)
+	go s.sendToAllStreams(leaveMessage, participantId)
 
 	log.Printf("Participant %s left the chat at Lamport time %d", participantId, s.lamportTime)
 	return &pb.LeaveResponse{ByeMessage: "Goodbye!"}, nil
 }
 
-
-func (s *ChitChatServer) sendToAllStreams(msg *pb.BroadcastMessage) {
+func (s *ChitChatServer) sendToAllStreams(msg *pb.BroadcastMessage, excludeId string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for participantId, stream := range s.streams {
+		if participantId != excludeId{
 		select {
 		case stream <- msg:
-			log.Printf("Broadcasting message to %s: %s", participantId, msg.Message)
 		default:
 			log.Printf("Failed to send message to %s: channel is full", participantId)
 		}
 	}
+}
 }
 
 func (s *ChitChatServer) PublishMessage(ctx context.Context, req *pb.ChatMessage) (*pb.PublishResponse, error) {
@@ -100,15 +96,14 @@ func (s *ChitChatServer) PublishMessage(ctx context.Context, req *pb.ChatMessage
 	messageTime := s.lamportTime
 	s.mu.Unlock()
 
-	
 	msg := fmt.Sprintf("Message from %s: %s", req.ParticipantId, req.Message)
 	s.sendToAllStreams(&pb.BroadcastMessage{
 		Message:       msg,
 		Time:          messageTime,
 		ParticipantId: req.ParticipantId,
-	})
+	}, req.ParticipantId)
 
-	log.Printf("Published message from %s at Lamport time %d: %s", req.ParticipantId, messageTime, req.Message)
+	log.Printf("Participant %s published message at Lamport time %d: %s", req.ParticipantId, messageTime, req.Message)
 	return &pb.PublishResponse{Status: "Message delivered"}, nil
 }
 
@@ -119,22 +114,20 @@ func (s *ChitChatServer) ReceiveMessages(req *pb.JoinRequest, stream pb.ChitChat
 		s.mu.Unlock()
 		return fmt.Errorf("participant %s not found", participantId)
 	}
-	
+
 	streamChannel := s.streams[participantId]
 	s.mu.Unlock()
 
-	
 	defer func() {
 		s.mu.Lock()
 		delete(s.streams, participantId)
 		s.mu.Unlock()
 	}()
 
-	
 	for {
 		msg, ok := <-streamChannel
 		if !ok {
-			return nil 
+			return nil
 		}
 		if err := stream.Send(&pb.BroadcastNotification{Message: msg}); err != nil {
 			return err
@@ -144,14 +137,13 @@ func (s *ChitChatServer) ReceiveMessages(req *pb.JoinRequest, stream pb.ChitChat
 
 func main() {
 	logFile, err := os.OpenFile("chitchat.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-    if err != nil {
-        log.Fatalf("failed to open log file: %v", err)
-    }
-    defer logFile.Close()
+	if err != nil {
+		log.Fatalf("failed to open log file: %v", err)
+	}
+	defer logFile.Close()
 
-   
-    log.SetOutput(logFile)
-	
+	log.SetOutput(logFile)
+
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

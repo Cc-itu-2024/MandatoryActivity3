@@ -6,62 +6,48 @@ option go_package = "/chitchat";
 
 import "google/protobuf/timestamp.proto";
 
-// The chat message structure
 message ChatMessage {
-    string message = 1; // This is the message content, not an ID
-    string participant_id = 2; // ID of the participant sending the message
+    string message = 1; 
+    string participant_id = 2; 
 }
 
-// The message structure for broadcasting messages
 message BroadcastMessage {
-    string message = 1; // The content of the broadcast message
-    int64 time = 2; // Lamport timestamp of the message
-    string participant_id = 3; // ID of the participant who sent the message
+    string message = 1;
+    int64 time = 2; 
+    string participant_id = 3; 
 }
 
-// Request message for joining the chat
 message JoinRequest {
      string participant_id = 1;
-    // No additional fields needed for now, could add optional fields later if needed
 }
 
-// Response message for joining the chat
 message JoinResponse {
-    string hello = 1; // Welcome message
-    string participant_id = 2; // ID of the participant who joined
+    string hello = 1; 
+    string participant_id = 2; 
 }
 
-// Request message for leaving the chat
 message LeaveRequest {
-    string participant_id = 1; // ID of the participant leaving
+    string participant_id = 1; 
 }
 
-// Response message for leaving the chat
 message LeaveResponse {
-    string bye_message = 1; // Goodbye message
+    string bye_message = 1; 
 }
 
-// Notification message sent to clients when a message is received
 message BroadcastNotification {
-    BroadcastMessage message = 1; // The broadcast message
+    BroadcastMessage message = 1; 
 }
 
-// ChitChat service definition
 service ChitChat {
-    // Method for clients to join the chat
     rpc Join(JoinRequest) returns (JoinResponse);
 
-    // Method for clients to leave the chat
     rpc Leave(LeaveRequest) returns (LeaveResponse);
 
-    // Method for clients to publish messages
     rpc PublishMessage(ChatMessage) returns (PublishResponse);
 
-    // Method for receiving messages as a stream
     rpc ReceiveMessages(JoinRequest) returns (stream BroadcastNotification);
 }
 
-// Response message for published messages
 message PublishResponse {
-    string status = 1; // Status of the publish operation
+    string status = 1; 
 }
