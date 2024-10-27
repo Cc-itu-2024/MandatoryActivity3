@@ -2,7 +2,9 @@ package server
 
 import (
 	proto "chitchat/chitchat"
-	//"context"
+	"context"
+	"fmt"
+	"sync"
 	//"log"
 	//"net"
 	//"google.golang.org/grpc"
@@ -36,8 +38,37 @@ func (p *Server) CreateStream(pconn *proto.Connect, stream proto.Broadcast_Creat
 	return <-conn.error
 }
 
-func BroadCastMessage() {
+func (s *Server) BroadcastMessage(ctx context.Context, msg *proto.Message) (*proto.Close, error) {
+	wait := sync.WaitGroup{}
+	done := make(chan int)
 
+	for _, conn := range s.Connection {
+		wait.Add(1)
+
+		go func(msg *proto.Message, conn *Connection) {
+			defer wait.Done()
+
+			if conn.active {
+				err := conn.stream.Send(msg)
+				fmt.Printf("Sending message to: %v from %v", conn.id, msg.Id)
+
+				if err != nil {
+					fmt.Printf("Error with Stream: %v - Error: %v\n", conn.stream, err)
+					conn.active = false
+					conn.error <- err
+				}
+			}
+		}(msg, conn)
+
+	}
+
+	go func() {
+		wait.Wait()
+		close(done)
+	}()
+
+	<-done
+	return &proto.Close{}, nil
 }
 
 func removeDisconnectedClients() {
