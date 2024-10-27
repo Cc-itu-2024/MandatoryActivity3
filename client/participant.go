@@ -1,9 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"log"
-	"time"
+	"os"
 
 	pb "chitchat/chitchat"
 
@@ -19,17 +20,14 @@ func main() {
 
 	client := pb.NewChitChatClient(conn)
 
-	// Join the chat
-	joinResp, err := client.Join(context.Background(), &pb.JoinRequest{})
+	joinResp, err := client.Join(context.Background(), &pb.JoinRequest{ParticipantId: ""})
 	if err != nil {
 		log.Fatalf("could not join: %v", err)
 	}
 	log.Printf("Join response: %s", joinResp.Hello)
 
-	// Save the assigned ParticipantId from Join response
-	participantId := joinResp.Hello
+	participantId := joinResp.ParticipantId
 
-	// Listen for incoming messages
 	go func() {
 		stream, err := client.ReceiveMessages(context.Background(), &pb.JoinRequest{ParticipantId: participantId})
 		if err != nil {
@@ -40,29 +38,63 @@ func main() {
 			if err != nil {
 				log.Fatalf("Error receiving message: %v", err)
 			}
-			log.Printf("Received: %s at time %d", notification.Message.Message, notification.Message.Time)
+			log.Printf("Received: %s at Lamport time %d", notification.Message.Message, notification.Message.Time)
 		}
 	}()
 
-	// Publish a message
-	pubResp, err := client.PublishMessage(context.Background(), &pb.ChatMessage{
-		Id:            "Hello, ChitChat, I am here!", // Used as message content, not as ID
-		ParticipantId: participantId, // Use assigned ID from server
-	})
-	if err != nil {
-		log.Fatalf("could not publish: %v", err)
+	scanner := bufio.NewScanner(os.Stdin)
+	for {
+		log.Print("Enter your message or write exit to leave")
+		if scanner.Scan() {
+			message := scanner.Text()
+
+			// Send meddelelsen til chatten
+			pubResp, err := client.PublishMessage(context.Background(), &pb.ChatMessage{
+				Message:       message,
+				ParticipantId: participantId,
+			})
+			if err != nil {
+				log.Fatalf("could not publish: %v", err)
+			}
+			if message == "exit" {
+				LeaveChat(client, participantId) // der skal ske noget her
+				break
+			}
+			log.Printf("Publish response: %s", pubResp.Status)
+		}
+
+		/*
+			pubResp, err := client.PublishMessage(context.Background(), &pb.ChatMessage{
+				Message:            "Hello, ChitChat, I am here!",
+				ParticipantId: participantId,
+			})
+			if err != nil {
+				log.Fatalf("could not publish: %v", err)
+			}
+			log.Printf("Publish response: %s", pubResp.Status)
+		*/
+
+		/*
+				time.Sleep(3 * time.Second)
+
+				leaveResp, err := client.Leave(context.Background(), &pb.LeaveRequest{
+					ParticipantId: participantId,
+				})
+				if err != nil {
+					log.Fatalf("could not leave: %v", err)
+				}
+				log.Printf("Leave response: %s", leaveResp.ByeMessage)
+			}
+		*/
 	}
-	log.Printf("Publish response: %s", pubResp.Status)
-
-	// Wait before ending
-	time.Sleep(3 * time.Second)
-
-	// Send a Leave request
+}
+func LeaveChat(client pb.ChitChatClient, participantId string) {
 	leaveResp, err := client.Leave(context.Background(), &pb.LeaveRequest{
-		ParticipantId: participantId, // Use assigned ID from server
+		ParticipantId: participantId,
 	})
 	if err != nil {
-		log.Fatalf("could not leave: %v", err)
+		log.Fatal("failed to leave chat :(")
 	}
-	log.Printf("Leave response: %s", leaveResp.ByeMessage)
+
+	log.Printf("%s %s %d", participantId, leaveResp.ByeMessage)
 }

@@ -2,9 +2,13 @@ syntax = "proto3";
 
 package chitchat;
 
+option go_package = "/chitchat";
+
+import "google/protobuf/timestamp.proto";
+
 // The chat message structure
 message ChatMessage {
-    string id = 1; // This is the message content, not an ID
+    string message = 1; // This is the message content, not an ID
     string participant_id = 2; // ID of the participant sending the message
 }
 
@@ -17,12 +21,14 @@ message BroadcastMessage {
 
 // Request message for joining the chat
 message JoinRequest {
+     string participant_id = 1;
     // No additional fields needed for now, could add optional fields later if needed
 }
 
 // Response message for joining the chat
 message JoinResponse {
     string hello = 1; // Welcome message
+    string participant_id = 2; // ID of the participant who joined
 }
 
 // Request message for leaving the chat

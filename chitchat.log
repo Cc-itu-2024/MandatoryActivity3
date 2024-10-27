@@ -1,0 +1,47 @@
+2024/10/27 20:42:34 Server listening on [::]:50051
+2024/10/27 20:42:48 Participant User 1 joined the chat at Lamport time 1
+2024/10/27 20:42:48 Broadcasting message to User 1: Participant User 1 joined at Lamport time 1
+2024/10/27 20:43:01 Broadcasting message to User 1: Message from User 1: hey you guys?
+2024/10/27 20:43:01 Published message from User 1 at Lamport time 2: hey you guys?
+2024/10/27 20:43:04 Participant User 2 joined the chat at Lamport time 3
+2024/10/27 20:43:04 Broadcasting message to User 2: Participant User 2 joined at Lamport time 3
+2024/10/27 20:43:04 Broadcasting message to User 1: Participant User 2 joined at Lamport time 3
+2024/10/27 20:43:07 Broadcasting message to User 2: Message from User 2: hey 
+2024/10/27 20:43:07 Broadcasting message to User 1: Message from User 2: hey 
+2024/10/27 20:43:07 Published message from User 2 at Lamport time 4: hey 
+2024/10/27 20:43:21 Participant User 3 joined the chat at Lamport time 5
+2024/10/27 20:43:21 Broadcasting message to User 3: Participant User 3 joined at Lamport time 5
+2024/10/27 20:43:21 Broadcasting message to User 1: Participant User 3 joined at Lamport time 5
+2024/10/27 20:43:21 Broadcasting message to User 2: Participant User 3 joined at Lamport time 5
+2024/10/27 20:43:23 Broadcasting message to User 3: Message from User 3: heysi
+2024/10/27 20:43:23 Broadcasting message to User 1: Message from User 3: heysi
+2024/10/27 20:43:23 Broadcasting message to User 2: Message from User 3: heysi
+2024/10/27 20:43:23 Published message from User 3 at Lamport time 6: heysi
+2024/10/27 20:43:32 Broadcasting message to User 1: Message from User 1: exit
+2024/10/27 20:43:32 Broadcasting message to User 2: Message from User 1: exit
+2024/10/27 20:43:32 Broadcasting message to User 3: Message from User 1: exit
+2024/10/27 20:43:32 Published message from User 1 at Lamport time 7: exit
+2024/10/27 20:43:32 Participant User 1 left the chat at Lamport time 8
+2024/10/27 20:43:32 Broadcasting message to User 2: Participant User 1 left at Lamport time 8
+2024/10/27 20:43:32 Broadcasting message to User 3: Participant User 1 left at Lamport time 8
+2024/10/27 20:45:18 Server listening on [::]:50051
+2024/10/27 20:45:34 Participant User 1 joined the chat at Lamport time 1
+2024/10/27 20:45:34 Broadcasting message to User 1: Participant User 1 joined at Lamport time 1
+2024/10/27 20:45:48 Participant User 2 joined the chat at Lamport time 2
+2024/10/27 20:45:48 Broadcasting message to User 1: Participant User 2 joined at Lamport time 2
+2024/10/27 20:45:48 Broadcasting message to User 2: Participant User 2 joined at Lamport time 2
+2024/10/27 20:45:50 failed to listen: listen tcp :50051: bind: address already in use
+2024/10/27 20:45:57 Broadcasting message to User 1: Message from User 1: hey
+2024/10/27 20:45:57 Broadcasting message to User 2: Message from User 1: hey
+2024/10/27 20:45:57 Published message from User 1 at Lamport time 3: hey
+2024/10/27 20:46:01 Broadcasting message to User 1: Message from User 1: whats up
+2024/10/27 20:46:01 Broadcasting message to User 2: Message from User 1: whats up
+2024/10/27 20:46:01 Published message from User 1 at Lamport time 4: whats up
+2024/10/27 20:46:14 Broadcasting message to User 1: Message from User 1: exit
+2024/10/27 20:46:14 Broadcasting message to User 2: Message from User 1: exit
+2024/10/27 20:46:14 Published message from User 1 at Lamport time 5: exit
+2024/10/27 20:46:14 Participant User 1 left the chat at Lamport time 6
+2024/10/27 20:46:14 Broadcasting message to User 2: Participant User 1 left at Lamport time 6
+2024/10/27 20:46:21 Broadcasting message to User 2: Message from User 2: exit
+2024/10/27 20:46:21 Published message from User 2 at Lamport time 7: exit
+2024/10/27 20:46:21 Participant User 2 left the chat at Lamport time 8
