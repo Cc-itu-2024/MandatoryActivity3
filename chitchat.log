@@ -1,0 +1,17 @@
+2024/10/27 21:56:36 Server listening on [::]:50051
+2024/10/27 21:56:41 Participant 1 joined the chat at Lamport time 1
+2024/10/27 21:56:50 Participant 1 published message at Lamport time 2: Hey, er der nogle her i chatten?
+2024/10/27 21:56:55 Participant 2 joined the chat at Lamport time 3
+2024/10/27 21:57:00 Participant 2 published message at Lamport time 4: Ja, hej med dig!
+2024/10/27 21:57:07 Participant 1 published message at Lamport time 5: Hej har du det godt?
+2024/10/27 21:57:11 Participant 3 joined the chat at Lamport time 6
+2024/10/27 21:57:25 Participant 3 published message at Lamport time 7: Hej med jer 2, jeg har lige joinet chatten;)
+2024/10/27 21:57:34 Participant 2 published message at Lamport time 8: Hej!
+2024/10/27 21:57:41 Participant 1 published message at Lamport time 9: Goddag
+2024/10/27 21:57:59 Participant 2 published message at Lamport time 10: Nå, sry guys, men jeg må hellere hoppe i seng, jeg forlader chatten nu..
+2024/10/27 21:58:00 Participant 2 left the chat at Lamport time 11
+2024/10/27 21:58:26 Participant 3 published message at Lamport time 12: Årghhh øv, også mig så.. vi ses venner
+2024/10/27 21:58:27 Participant 3 left the chat at Lamport time 13
+2024/10/27 21:58:39 Participant 1 published message at Lamport time 14: øvvvvvv, så er jeg den eneste tilbage...
+2024/10/27 21:58:52 Participant 1 published message at Lamport time 15: Det er kedelig at være alene.. så jeg går også.. seees
+2024/10/27 21:58:53 Participant 1 left the chat at Lamport time 16

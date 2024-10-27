@@ -1,30 +1,53 @@
 syntax = "proto3";
 
-package gRPC;
+package chitchat;
 
 option go_package = "/chitchat";
 
 import "google/protobuf/timestamp.proto";
 
-message Participant {
-    string id = 1;
-    string name = 2;
+message ChatMessage {
+    string message = 1; 
+    string participant_id = 2; 
 }
 
-message Message {
-    string id = 1;
-    string content = 2;
-    google.protobuf.Timestamp timestamp = 3;
+message BroadcastMessage {
+    string message = 1;
+    int64 time = 2; 
+    string participant_id = 3; 
 }
 
-message Connect {
-    Participant participant = 1;
-    bool active = 2;
+message JoinRequest {
+     string participant_id = 1;
 }
 
-message Close {}
+message JoinResponse {
+    string hello = 1; 
+    string participant_id = 2; 
+}
+
+message LeaveRequest {
+    string participant_id = 1; 
+}
+
+message LeaveResponse {
+    string bye_message = 1; 
+}
+
+message BroadcastNotification {
+    BroadcastMessage message = 1; 
+}
 
 service ChitChat {
-    rpc CreateStream(Connect) returns (stream Message);
-    rpc BroadcastMessage(Message) returns (Close);
+    rpc Join(JoinRequest) returns (JoinResponse);
+
+    rpc Leave(LeaveRequest) returns (LeaveResponse);
+
+    rpc PublishMessage(ChatMessage) returns (PublishResponse);
+
+    rpc ReceiveMessages(JoinRequest) returns (stream BroadcastNotification);
+}
+
+message PublishResponse {
+    string status = 1; 
 }
