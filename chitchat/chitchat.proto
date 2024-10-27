@@ -2,63 +2,60 @@ syntax = "proto3";
 
 package chitchat;
 
-option go_package = "/chitchat";
-
-
-import "google/protobuf/timestamp.proto";
-
-message chatMessage {
-    string id = 1; //Valid message of 128 characters
-    string participantId = 2; //ID of the participant
+// The chat message structure
+message ChatMessage {
+    string id = 1; // This is the message content, not an ID
+    string participant_id = 2; // ID of the participant sending the message
 }
 
-
-message LeaveResponse {
-    string byeMessage = 1;
+// The message structure for broadcasting messages
+message BroadcastMessage {
+    string message = 1; // The content of the broadcast message
+    int64 time = 2; // Lamport timestamp of the message
+    string participant_id = 3; // ID of the participant who sent the message
 }
 
-message LeaveRequest{
-    string participantId = 1;
+// Request message for joining the chat
+message JoinRequest {
+    // No additional fields needed for now, could add optional fields later if needed
 }
 
-
-//Besked som Participant sender til Serveren
-message JoinRequest{
-    string participantId = 1;
-}
-
-//Besked som serveren sender tilbage til Participant
+// Response message for joining the chat
 message JoinResponse {
-    string hello = 1;
+    string hello = 1; // Welcome message
 }
 
-message PublishResponse{
-    string status = 1;
+// Request message for leaving the chat
+message LeaveRequest {
+    string participant_id = 1; // ID of the participant leaving
 }
 
-message BroadcastMessage{
-    string message = 1;
-    int64 time = 2;
-    string participantId = 3;
+// Response message for leaving the chat
+message LeaveResponse {
+    string bye_message = 1; // Goodbye message
 }
 
-message BroadcastResponse {
-    string status = 1;
+// Notification message sent to clients when a message is received
+message BroadcastNotification {
+    BroadcastMessage message = 1; // The broadcast message
 }
 
+// ChitChat service definition
 service ChitChat {
-
-    //Lav en message
-    rpc PublishMessage (chatMessage) returns (PublishResponse);
-    
-    //Publishes message til alle
-    rpc Broadcast(BroadcastMessage) returns (BroadcastResponse);
-
-    //Participant wants to join the chat
+    // Method for clients to join the chat
     rpc Join(JoinRequest) returns (JoinResponse);
 
-    //Forlad chatten
+    // Method for clients to leave the chat
     rpc Leave(LeaveRequest) returns (LeaveResponse);
 
+    // Method for clients to publish messages
+    rpc PublishMessage(ChatMessage) returns (PublishResponse);
 
+    // Method for receiving messages as a stream
+    rpc ReceiveMessages(JoinRequest) returns (stream BroadcastNotification);
+}
+
+// Response message for published messages
+message PublishResponse {
+    string status = 1; // Status of the publish operation
 }
